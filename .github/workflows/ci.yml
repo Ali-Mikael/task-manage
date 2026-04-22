@@ -26,14 +26,15 @@ jobs:
       # AUDIT
       - name: Audit node modules
         working-directory: ../..
-        run: npm audit
+        run: npm audit --audit-level=high
 
       - name: Audit backend
         working-directory: ../../backend
-        run: npm audit
+        run: npm audit --audit-level=high
 
       - name: Audit frontend
         working-directory: ../../frontend
+        run: npm audit --audit-level=high
 
       # LINT
       - name: Check code
