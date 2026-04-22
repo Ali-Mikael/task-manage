@@ -1,5 +1,4 @@
-name: Task management app CI
-
+name: Task management CI
 
 on:
   push:
@@ -21,22 +20,29 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: npm install
+        working-directory: ../..
+        run: npm run install:all
 
-      # Linting
-      - name: Check code backend
+      # AUDIT
+      - name: Audit node modules
+        working-directory: ../..
+        run: npm audit
+
+      - name: Audit backend
         working-directory: ../../backend
-        run: npm run lint
+        run: npm audit
 
-      - name: Check code frontend
+      - name: Audit frontend
         working-directory: ../../frontend
-        run: npm run lint
 
-      # Run tests
-      - name: Run tests on backend
-        working-directory: ../../backend
-        run: npm test
+      # LINT
+      - name: Check code
+        working-directory: ../..
+        run: npm run lint --workspace backend
+        run: npm run lint --workspace frontend
 
-      - name: Run tests on frontend
-        working-directory: ../../frontend
-        run: npm test
+      # RUN TESTS
+      - name: Run tests on
+        working-directory: ../..
+        run: npm test --workspace backend
+        run: npm test --workspace frontend
