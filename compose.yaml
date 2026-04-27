@@ -3,11 +3,11 @@ services:
     build:
       context: ./frontend
       args:
-        - VITE_API_URL=http://backend:5000/api
+        - VITE_API_URL=http://localhost:5000/api
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "80:5173"
+      - "80:80"
 
   backend:
     depends_on:
@@ -15,7 +15,7 @@ services:
     build:
       context: ./backend
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - PORT=5000
       - DATABASE_URL=postgresql://postgres:secret1234@db:5432/taskmanagement
       - POSTGRES_DB=taskmanagement
@@ -23,7 +23,7 @@ services:
       - POSTGRES_PASSWORD=secret1234
       - JWT_SECRET=SuperSecretString4321!
       - JWT_EXPIRES_IN=7d
-      - FRONTEND_URL=http://localhost:5173
+      - FRONTEND_URL=http://localhost
         # True during initial prod deployment to sync DB
         # Set false after DB -> synchronized
       -  DB_SYNC=true
@@ -34,6 +34,8 @@ services:
 
   db:
     image: postgres:alpine
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - POSTGRES_DB=taskmanagement
       - POSTGRES_USER=postgres

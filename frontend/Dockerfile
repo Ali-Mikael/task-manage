@@ -15,9 +15,9 @@ COPY . .
 
 RUN npm run build
 
-RUN chown -R node:node /app
+# RUN chown -R node:node /app
 
-USER node
+# USER node
 
 
 
@@ -26,4 +26,4 @@ FROM nginx:alpine AS prod
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 5173
+EXPOSE 80
