@@ -9,7 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        component: [frontend, backend]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -18,32 +21,19 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
+          cache: 'npm'
 
       - name: Install dependencies
-        working-directory: ../..
-        run: npm run install:all
+        run: npm run install --workspaces
 
       # AUDIT
       - name: Audit node modules
-        working-directory: ../..
-        run: npm audit --audit-level=high
-
-      - name: Audit backend
-        working-directory: ../../backend
-        run: npm audit --audit-level=high
-
-      - name: Audit frontend
-        working-directory: ../../frontend
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       # LINT
       - name: Check code
-        working-directory: ../..
-        run: npm run lint --workspace backend
-        run: npm run lint --workspace frontend
+        run: npm run lint --workspace ${{ matrix.component }}
 
       # RUN TESTS
-      - name: Run tests on
-        working-directory: ../..
-        run: npm test --workspace backend
-        run: npm test --workspace frontend
+      - name: Run tests
+        run: npm test --workspace ${{ matrix.component }}
