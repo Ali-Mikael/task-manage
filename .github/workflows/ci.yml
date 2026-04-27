@@ -24,7 +24,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm run install --workspaces
+        run: npm run install --workspace ${{ matrix.component }}
 
       # AUDIT
       - name: Audit node modules
