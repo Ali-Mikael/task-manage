@@ -15,7 +15,7 @@ services:
     build:
       context: ./backend
     environment:
-      # Note that env vars here just for convenience, this is a prod setup
+      # Note that env vars here just for convenience, this is a NOT a prod setup
       - NODE_ENV=production
       - PORT=5000
       - DATABASE_URL=postgresql://postgres:secret1234@db:5432/taskmanagement
