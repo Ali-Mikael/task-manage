@@ -14,13 +14,8 @@ RUN npm run build
 FROM node:20-alpine
 
 WORKDIR /app
-
-COPY --from=builder /app /app
-
-RUN chown -R node:node /app
-
+COPY --from=builder --chown=node:node /app /app
 USER node
 
 EXPOSE 5000
-
-CMD ["npm", "run", "dev", "--", "-host", "0.0.0.0"]
+CMD ["npm", "start"]
