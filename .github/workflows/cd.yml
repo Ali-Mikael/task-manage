@@ -15,11 +15,11 @@ jobs:
         service:
           - name: Backend
             url: RENDER_DEPLOY_HOOK_BACKEND
-            image: "&imgURL=docker.io%2Fbootmanager%2Ftask-manage-backend%3Amain"
+            image: "&imgURL=docker.io%2Fbootmanager%2Ftask-manage-backend"
 
           - name: Frontend
             url: RENDER_DEPLOY_HOOK_FRONTEND
-            image: "&imgURL=docker.io%2Fbootmanager%2Ftask-manage-frontend%3Amain"
+            image: "&imgURL=docker.io%2Fbootmanager%2Ftask-manage-frontend"
 
     # Only trigger redeploy on a new image push
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
