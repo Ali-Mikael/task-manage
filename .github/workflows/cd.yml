@@ -1,0 +1,33 @@
+name: Task Management CD
+
+on:
+  workflow_run:
+    workflows: ["Publish Docker Image"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - name: Backend
+            url: RENDER_DEPLOY_HOOK_BACKEND
+
+          - name: Frontend
+            url: RENDER_DEPLOY_HOOK_FRONTEND
+    # Only trigger redeploy on a new image push
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Deploy ${{ matrix.service.name }}
+        env:
+          deploy_url: ${{ secrets[matrix.service.url] }}
+        run: |
+          if [ -z "$deploy_url" ]; then
+            echo "DEPLOY HOOK NOT SET!"
+            exit 1
+          fi
+
+          curl "$deploy_url"
