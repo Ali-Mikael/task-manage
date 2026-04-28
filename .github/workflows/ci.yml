@@ -1,4 +1,4 @@
-name: Task management CI
+name: Task Management CI
 
 on:
   push:
@@ -14,26 +14,26 @@ jobs:
       matrix:
         component: [frontend, backend]
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v6
 
-      - name: Set up node
+      - name: Set Up Node
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install --workspaces
 
       # AUDIT
-      - name: Audit node modules
+      - name: Audit Node Modules
         run: npm audit --audit-level=critical
 
       # LINT
-      - name: Check code
+      - name: Check Code
         run: npm run lint --workspace ${{ matrix.component }}
 
       # RUN TESTS
-      - name: Run tests
+      - name: Run Tests
         run: npm test --workspace ${{ matrix.component }}
